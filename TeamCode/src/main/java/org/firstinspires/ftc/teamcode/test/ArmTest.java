@@ -69,11 +69,11 @@ public class ArmTest extends OurTeleOpBase {
     @Override
     public void runOpMode() {
 
-       motor = hardwareMap.get(DcMotor.class, "slide0");
+       motor = hardwareMap.get(DcMotor.class, "extender1");
         // Connect to servo (Assume Robot Left Hand)
         // Change the text in quotes to match any servo name on your robot.
-        grabber_servo = hardwareMap.get(Servo.class, "grabber0");
-        rotator_servo = hardwareMap.get(Servo.class, "rotator1");
+        // grabber_servo = hardwareMap.get(Servo.class, "grabber0");
+        // rotator_servo = hardwareMap.get(Servo.class, "rotator1");
 
         // Wait for the start button
         telemetry.addData(">", "Press Start to scan Servo." );

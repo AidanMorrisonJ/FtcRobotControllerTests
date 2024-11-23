@@ -32,64 +32,41 @@ package org.firstinspires.ftc.teamcode.test;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.OurTeleOpBase;
+import org.firstinspires.ftc.teamcode.hardware.Slide;
+import org.firstinspires.ftc.teamcode.hardware.Arm;
 
-/*
- * This OpMode scans a single servo back and forward until Stop is pressed.
- * The code is structured as a LinearOpMode
- * INCREMENT sets how much to increase/decrease the servo position each cycle
- * CYCLE_MS sets the update period.
- *
- * This code assumes a Servo configured with the name "left_hand" as is found on a Robot.
- *
- * NOTE: When any servo position is set, ALL attached servos are activated, so ensure that any other
- * connected servos are able to move freely before running this test.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
 @TeleOp(name = "Test: Arm Turn Test", group = "Test")
 //@Disabled
-public class ArmTurnTest extends OurTeleOpBase {
+public class ArmTurnTest extends LinearOpMode {
 
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_POS     =  0.9;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
-
-    DcMotor motor;
-    // Define class members
-    Servo   grabber_servo;
-    Servo   rotator_servo;
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    boolean rampUp = true;
+    Slide slide = new Slide(this);
+    Arm arm = new Arm(this);
 
 
     @Override
     public void runOpMode() {
 
-       motor = hardwareMap.get(DcMotor.class, "arm0");
+	slide.init();
+	arm.init();
         // Connect to servo (Assume Robot Left Hand)
         // Wait for the start button
-        telemetry.addData(">", "Press Star." );
+        telemetry.addData(">", "Press Start." );
         telemetry.update();
         waitForStart();
 
 
         // Scan servo till stop pressed.
         while(opModeIsActive()){
-double power = gamepad1.left_stick_y;
-motor.setPower(power);
-// slew the servo, according to the rampUp (direction) variable.
- 	    // Display the current value
+
+	    double power = gamepad1.left_stick_y;
+	    arm.move(power);
+	    double powerext = gamepad1.left_stick_x;
+	    slide.move(powerext);
             telemetry.addData("Power", "%5.2f", power);
             telemetry.update();
 
-            // Set the servo to the new position and pause;
-	    //            rotator_servo.setPosition(position);
-	    //            sleep(CYCLE_MS);
-            //idle();
         }
 
         // Signal done;

@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import org.firstinspires.ftc.teamcode.hardware.DriveTrain;
 /**
  * This file contains an example of a Linear "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -68,37 +68,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 //@Disabled
 public class MecanumDrive extends LinearOpMode {
 
+    DriveTrain drive = new DriveTrain(this);
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
 
   @Override
     public void runOpMode() {
 
-        // Initialize the hardware variables. Note that the strings used here must correspond
-        // to the names assigned during the robot configuration step on the DS or RC devices.
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "backleft");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
-
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
 		// Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
+	drive.init();
         waitForStart();
         runtime.reset();
 
@@ -107,49 +87,11 @@ public class MecanumDrive extends LinearOpMode {
             double max;
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-	    if (Math.abs(axial) < 0.15)
-		{
-		    axial = 0.;
-		}
-            axial = axial*0.7;  // Note: pushing stick forward gives negative value
-            double lateral = 0.;
-            if (Math.abs(gamepad1.left_stick_x) > 0.8) {
-                if (Math.abs(gamepad1.left_stick_y) < 0.3) {
-                    lateral = gamepad1.left_stick_x;
-                }
-            }
+            double lateral = gamepad1.left_stick_x;
             double yaw = gamepad1.right_stick_x*0.6;
-
-            // Combine the joystick requests for each axis-motion to determine each wheel's power.
-            // Set up a variable for each drive wheel to save the power level for telemetry.
-            double leftFrontPower = axial + lateral + yaw;
-            double rightFrontPower = axial - lateral - yaw;
-            double leftBackPower = axial - lateral + yaw;
-            double rightBackPower = axial + lateral - yaw;
-            // Normalize the values so no wheel power exceeds 100%
-            // This ensures that the robot maintains the desired motion.
-            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-            max = Math.max(max, Math.abs(leftBackPower));
-            max = Math.max(max, Math.abs(rightBackPower));
-
-            if (max > 1.0) {
-                leftFrontPower /= max;
-                rightFrontPower /= max;
-                leftBackPower /= max;
-                rightBackPower /= max;
-            }
-
-
-            // Send calculated power to wheels
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
-
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
-        }
-    }
+	    drive.driveRobot(axial,lateral,yaw);
+	}
+  }
 }
 
 
