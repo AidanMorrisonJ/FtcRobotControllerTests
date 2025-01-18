@@ -51,7 +51,7 @@ if (armposition <= 60)
     powerarm = Math.max(powerarm,0);
 }
 arm.move(powerarm);
-if (slideposition >= 2000)
+if (slideposition >= 3000)
     {
 	powerslide = Math.min(powerslide,0);
     }

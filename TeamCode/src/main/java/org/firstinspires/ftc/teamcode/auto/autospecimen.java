@@ -5,23 +5,21 @@ import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
 import org.firstinspires.ftc.teamcode.hardware.Arm;
+import org.firstinspires.ftc.teamcode.hardware.Grabber;
+import org.firstinspires.ftc.teamcode.hardware.Rotator;
+import org.firstinspires.ftc.teamcode.hardware.Slide;
 
-@Autonomous(name = "autonomous", group = "Wallace")
+@Autonomous(name = "auto specimen", group = "Wallace")
 //@Disabled
-public class autonomous extends LinearOpMode {
+public class autospecimen extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
     boolean skip_opencv = false;
@@ -48,13 +46,22 @@ public class autonomous extends LinearOpMode {
 
     //int DESIRED_TAG_ID = 5;    // Choose the tag you want to approach or set to -1 for ANY tag.
     Arm arm = new Arm(this);
+    Rotator rotator = new Rotator(this);
+    Grabber grabber = new Grabber(this);
+    Slide slide = new Slide(this);
 
 
     @Override
     public void runOpMode() {
 
-        arm.init();
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
+       arm.init();
+        slide.init();
+       grabber.init();
+       rotator.init();
+	sleep(1000);
+	rotator.initpos();
+	grabber.grab();
+       leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
         leftBackDrive = hardwareMap.get(DcMotor.class, "backleft");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
@@ -89,18 +96,54 @@ public class autonomous extends LinearOpMode {
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-	//	arm.MoveTo(500);
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Starting at", "%7d :%7d",
                 leftFrontDrive.getCurrentPosition(),
                 rightFrontDrive.getCurrentPosition());
         //BlueFinder.Selected selected;
         // here is what happens after we hit start
+	arm.move(0.1);
         while (!isStarted() && !isStopRequested()) {
         }
+	arm.Float();
 	arm.move(-0.4);
+	while(arm.getCurrentPosition() > 200)
+	    {
+		sleep(1);
+	    }
+	arm.Stop();
+            while (!gamepad1.a) {
+                sleep(1);
+            }
 	sleep(100);
-	moveRobot_forward(DRIVE_SPEED,0,30);
+
+	//	left_turn(92);
+	arm.Brake();
+	arm.Reset();
+         telemetry.addData("armpos:", "%10d", arm.getCurrentPosition());
+            telemetry.addData("slidepos:", "%10df", slide.getCurrentPosition());
+            telemetry.update();
+            while (!gamepad1.a) {
+                sleep(1);
+            }
+	
+	arm.move(0.4);
+	while(arm.getCurrentPosition() < 1400)
+	    {
+		sleep(1);
+	    }
+	arm.move(0.05);
+	rotator.setposition(0.45);
+	    moveRobot_forward(DRIVE_SPEED,0,10);
+            while (!gamepad1.a) {
+                sleep(1);
+            }
+	slide.move(0.4);
+	while(slide.getCurrentPosition() < 1400)
+	    {
+		sleep(1);
+	    }
+	slide.Stop();
 	//	            encoderDrive(DRIVE_SPEED, 12, 12, 5.0);
             while (!gamepad1.a) {
                 sleep(1);
@@ -203,9 +246,9 @@ public class autonomous extends LinearOpMode {
 
         telemetry.addData("move robot", "%d, %.1f, %.1f, %d", gohere, distance, COUNTS_PER_INCH, currpos);
         telemetry.update();
-        while (!gamepad1.a) {
-            sleep(1);
-        }
+        // while (!gamepad1.a) {
+        //     sleep(1);
+        // }
         // Send powers to the wheels.
         leftFrontDrive.setPower(leftPower);
         leftBackDrive.setPower(leftPower);
@@ -242,9 +285,9 @@ public class autonomous extends LinearOpMode {
 
         telemetry.addData("move robot", "%d, %.1f, %.1f, %d", gohere, distance, COUNTS_PER_INCH, currpos);
         telemetry.update();
-        while (!gamepad1.a) {
-            sleep(1);
-        }
+        // while (!gamepad1.a) {
+        //     sleep(1);
+        // }
         // Send powers to the wheels.
         leftFrontDrive.setPower(leftPower);
         leftBackDrive.setPower(leftPower);

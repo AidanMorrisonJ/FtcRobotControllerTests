@@ -63,7 +63,7 @@ public class ArmLockTest extends LinearOpMode {
                 slidepower = -gamepad1.right_stick_y;  // Note: pushing stick forwa	// Display the current value
             }
             arm.move(armpower);
-            if (slideposition > slide.maxSlidePosition()) {
+            if (slideposition > slide.maxSlidePosition(armposition)) {
                 slidepower = Math.min(slidepower, slide.SlideHoldPower());
             }
             slide.move(slidepower);

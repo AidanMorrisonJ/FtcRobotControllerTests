@@ -8,7 +8,7 @@ public class Rotator {
 
     static final double MAX_POS = 1.0;     // Maximum rotational position
     static final double MIN_POS = 0.0;     // Minimum rotational position
-    private double currpos = 0.5;
+    private double currpos = 0.7; // starting position
     private double increment = 0.05;
     /* Declare OpMode members. */
     private final LinearOpMode myOpMode;   // gain access to methods in the calling OpMode.
@@ -54,6 +54,10 @@ public class Rotator {
     public void rotate_left() {
         if (currpos > MIN_POS) {
             currpos = currpos - increment;
+	    if(currpos < MIN_POS)
+		{
+		    currpos =   MIN_POS;
+		}
             TurnServo.setPosition(currpos);
         }
         myOpMode.telemetry.addData("rotleft:", "%5.2f", currpos);
@@ -83,9 +87,13 @@ public class Rotator {
     }
     public void initpos()
     {
-	currpos = 0.25;
         TurnServo.setPosition(currpos);
             myOpMode.telemetry.addData("set currpos:", "%5.2f", currpos);
     }
-
+    public void setposition(double pos)
+    {
+	currpos = Math.min(pos,1);
+	currpos = Math.max(pos,0);
+	TurnServo.setPosition(currpos);
+    }
 }

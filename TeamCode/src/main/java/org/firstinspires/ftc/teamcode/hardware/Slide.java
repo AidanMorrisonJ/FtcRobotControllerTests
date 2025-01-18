@@ -13,6 +13,7 @@ public class Slide {
     private DcMotor Slide = null;
     // limits
     long maxslideposition = 2980;
+    long maxslidehorizontalposition = 2000;
     double slideholdpower = 0.07; // holds the slide in place
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public Slide(LinearOpMode opmode) {
@@ -44,9 +45,17 @@ public class Slide {
     public long getCurrentPosition() {
         return Slide.getCurrentPosition();
     }
-    public long maxSlidePosition()
+
+    public long maxSlidePosition(long armposition)
     {
-	return maxslideposition;
+	if (armposition > 1000)
+	    {
+		return maxslideposition;
+	    }
+	else
+	    {
+		return maxslidehorizontalposition;
+	    }
     }
     public double SlideHoldPower()
     {
@@ -55,5 +64,9 @@ public class Slide {
     public void Reset(){
             Slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void Stop()
+    {
+	Slide.setPower(0);
     }
 }

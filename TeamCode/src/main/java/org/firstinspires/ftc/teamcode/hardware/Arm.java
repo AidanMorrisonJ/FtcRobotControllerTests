@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 public class Arm {
 
@@ -45,6 +46,14 @@ public class Arm {
     public void move(double power) {
         Arm.setPower(power);
     }
+    public void Float()
+    {
+		        Arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+    public void Brake()
+    {
+		        Arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
 
     public long getCurrentPosition() {
         return Arm.getCurrentPosition();
@@ -60,5 +69,24 @@ public class Arm {
     public void Reset(){
         Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }	
+    }
+    public void MoveTo(int ticks)
+    {
+        Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+	Arm.setTargetPosition(ticks);
+	Arm.setPower(-0.2);
+	    while(Arm.isBusy())
+		{
+		    myOpMode.sleep(1);
+		}
+	Arm.setPower(0);
+        Arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+    public void Stop()
+    {
+	Arm.setPower(0);
+    }
+	    
+	
 }

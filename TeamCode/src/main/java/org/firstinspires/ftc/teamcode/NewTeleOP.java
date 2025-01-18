@@ -32,7 +32,7 @@ public class NewTeleOP extends LinearOpMode {
     double slowyaw = 0.15;
     boolean p1Xpushed = false;
     boolean p1Ypushed = false;
-
+    boolean p1bpushed = false;
     @Override
     public void runOpMode() {
         drive.init();
@@ -58,9 +58,19 @@ public class NewTeleOP extends LinearOpMode {
             //     }
             // }
            drive.driveRobot(axial, lateral, yaw);
+	   if (gamepad1.b){
+	       if (! p1bpushed)
+		   {
+	       arm.Float();
+	       p1bpushed = true;
+		   }
+	   }
+	   p1bpushed = false;
+
 	   if (gamepad1.x){
 	       if (! p1Xpushed)
 		   {
+		       arm.Brake();
 	       arm.Reset();
 	       p1Xpushed = true;
 		   }
@@ -85,7 +95,8 @@ public class NewTeleOP extends LinearOpMode {
             }
             if (gamepad2.a) {
                 if (!apushed) {
-                    rotator.rotate_left();
+		    //                    rotator.rotate_left();
+		    rotator.setposition(0.45);
                     apushed = true;
                 }
             } else {
@@ -145,7 +156,7 @@ public class NewTeleOP extends LinearOpMode {
             if (armposition <= 60) {
                 armpower = Math.max(armpower, 0);
             }
-            if (slideposition >= slide.maxSlidePosition()) {
+            if (slideposition >= slide.maxSlidePosition(armposition)) {
                 powerslide = Math.min(powerslide, 0);
             }
             if (slideposition <= 60) {

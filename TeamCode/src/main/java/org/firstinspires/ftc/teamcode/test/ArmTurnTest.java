@@ -30,11 +30,15 @@ public class ArmTurnTest extends LinearOpMode {
         // Scan servo till stop pressed.
         while (opModeIsActive()) {
 
+            long armposition = arm.getCurrentPosition();
+            long slideposition = slide.getCurrentPosition();
             double power = gamepad1.left_stick_y;
             arm.move(power);
             double powerext = gamepad1.left_stick_x;
             slide.move(powerext);
             telemetry.addData("Power", "%5.2f", power);
+            telemetry.addData("armpos:", "%10d", armposition);
+            telemetry.addData("slidepos:", "%10df", slideposition);
             telemetry.update();
 
         }
