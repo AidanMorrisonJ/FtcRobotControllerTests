@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,11 +7,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class Slide {
 
     /* Declare OpMode members. */
-    private LinearOpMode myOpMode;   // gain access to methods in the calling OpMode.
+    private final LinearOpMode myOpMode;   // gain access to methods in the calling OpMode.
 
     // Define Motor and Servo objects  (Make them private so they can't be accessed externally)
     private DcMotor Slide = null;
-
+    // limits
+    long maxslideposition = 2980;
+    double slideholdpower = 0.07; // holds the slide in place
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public Slide(LinearOpMode opmode) {
         myOpMode = opmode;
@@ -24,27 +25,35 @@ public class Slide {
      * <p>
      * All of the hardware devices are accessed via the hardware map, and initialized.
      */
-    public void init()    {
+    public void init() {
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
-        Slide = myOpMode.hardwareMap.get(DcMotor.class, "extender1");
+        Slide = myOpMode.hardwareMap.get(DcMotor.class, "slide");
 
-        Slide.setDirection(DcMotor.Direction.FORWARD);
+        Slide.setDirection(DcMotor.Direction.REVERSE);
         Slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        myOpMode.telemetry.addData(">", "Slide Train Initialized");
-        myOpMode.telemetry.update();
+        myOpMode.telemetry.addData(">", "Slide Initialized");
     }
 
-    /**
-     * Calculates the left/right motor powers required to achieve the requested
-     * robot motions using the input values from the controler.
-     * Then sends these power levels to the motors.
-     */
     public void move(double power) {
-        // Combine drive and turn for blended motion.
-            // Send calculated power to wheels
-            Slide.setPower(power);
+        Slide.setPower(power);
     }
 
-
+    public long getCurrentPosition() {
+        return Slide.getCurrentPosition();
+    }
+    public long maxSlidePosition()
+    {
+	return maxslideposition;
+    }
+    public double SlideHoldPower()
+    {
+	return slideholdpower;
+    }
+    public void Reset(){
+            Slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }
