@@ -13,10 +13,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.hardware.Arm;
+import org.firstinspires.ftc.teamcode.hardware.Grabber;
+import org.firstinspires.ftc.teamcode.hardware.Rotator;
+import org.firstinspires.ftc.teamcode.hardware.Slide;
 
-@Autonomous(name = "auto park", group = "Wallace")
+@Autonomous(name = "auto specimen no parking", group = "Wallace")
 //@Disabled
-public class autopark extends LinearOpMode {
+public class autospecimennopark extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
     boolean skip_opencv = false;
@@ -43,13 +46,22 @@ public class autopark extends LinearOpMode {
 
     //int DESIRED_TAG_ID = 5;    // Choose the tag you want to approach or set to -1 for ANY tag.
     Arm arm = new Arm(this);
+    Rotator rotator = new Rotator(this);
+    Grabber grabber = new Grabber(this);
+    Slide slide = new Slide(this);
 
 
     @Override
     public void runOpMode() {
 
-        arm.init();
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
+       arm.init();
+        slide.init();
+       grabber.init();
+       rotator.init();
+	sleep(1000);
+	rotator.initpos();
+	grabber.grab();
+       leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
         leftBackDrive = hardwareMap.get(DcMotor.class, "backleft");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
         rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
@@ -93,14 +105,75 @@ public class autopark extends LinearOpMode {
 	arm.move(0.1);
         while (!isStarted() && !isStopRequested()) {
         }
-	// arm.move(-0.4);
-	// sleep(100);
-		moveRobot_forward(DRIVE_SPEED,0,5);
-	right_turn_counter(870);
-	moveRobot_forward(DRIVE_SPEED,0,40);
-            while (!gamepad1.a) {
-                sleep(1);
-            }
+	    moveRobot_forward(DRIVE_SPEED+0.1,0,5);
+	//arm.Float();
+	arm.move(-0.4);
+	while(arm.getCurrentPosition() > -200)
+	    {
+		sleep(1);
+	    }
+	arm.Stop();
+            // while (!gamepad1.a) {
+            //     sleep(1);
+            // }
+	sleep(3000);
+
+	//	left_turn(92);
+	//arm.Brake();
+	arm.Reset();
+         telemetry.addData("armpos:", "%10d", arm.getCurrentPosition());
+            telemetry.addData("slidepos:", "%10df", slide.getCurrentPosition());
+            telemetry.update();
+            // while (!gamepad1.a) {
+            //     sleep(1);
+            // }
+	
+	arm.move(0.4);
+	while(arm.getCurrentPosition() < 1530)
+	    {
+		sleep(1);
+	    }
+	arm.move(0.05);
+	rotator.setposition(0.45);
+            // while (!gamepad1.a) {
+            //     sleep(1);
+            // }
+	slide.move(0.4);
+	while(slide.getCurrentPosition() < 950)
+	    {
+		sleep(1);
+	    }
+	slide.move(0.05);
+	    moveRobot_forward(DRIVE_SPEED,0,30);
+	                leftFrontDrive.setPower(0.05);
+            rightFrontDrive.setPower(0.05);
+            leftBackDrive.setPower(0.05);
+            rightBackDrive.setPower(0.05);
+	    sleep(1000);
+	    long startpos = slide.getCurrentPosition();
+	slide.move(-0.4);
+	while(slide.getCurrentPosition() > (startpos - 500))
+	    { 
+		sleep(1);
+	    }
+	slide.move(0.05);
+	sleep(1000);
+	grabber.release();
+	//	            encoderDrive(DRIVE_SPEED, 12, 12, 5.0);
+	moveRobot_backward(DRIVE_SPEED,0,5);
+	slide.move(-0.3);
+	while(slide.getCurrentPosition() > 60)
+	    {
+		sleep(1);
+	    }
+	slide.move(-0.07);
+	arm.move(0.4);
+	while(arm.getCurrentPosition() < 1700)
+	    {
+		sleep(1);
+	    }
+	arm.move(0.05);
+
     }
     /*
      *  Method to perform a relative move, based on encoder counts.
@@ -311,15 +384,12 @@ public class autopark extends LinearOpMode {
 	return;
     }
 
-	double right_turn(double ANGLE) {
+    double right_turn(double ANGLE) {
         Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         double current_angle = angles.firstAngle;
         double driveto_angle = current_angle - ANGLE;
         telemetry.addData("right turn: ", "input: %.1f, current angle %.1f, driveto: %.1f", ANGLE, current_angle, driveto_angle);
         telemetry.update();
-            // while (!gamepad1.a) {
-            //     sleep(1);
-            // }
         leftFrontDrive.setPower(TURN_SPEED);
         rightFrontDrive.setPower(-TURN_SPEED);
         leftBackDrive.setPower(TURN_SPEED);

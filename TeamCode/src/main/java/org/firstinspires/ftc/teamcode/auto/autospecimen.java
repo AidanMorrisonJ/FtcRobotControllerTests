@@ -105,49 +105,77 @@ public class autospecimen extends LinearOpMode {
 	arm.move(0.1);
         while (!isStarted() && !isStopRequested()) {
         }
-	arm.Float();
+	    moveRobot_forward(DRIVE_SPEED+0.1,0,5);
+	//arm.Float();
 	arm.move(-0.4);
-	while(arm.getCurrentPosition() > 200)
+	while(arm.getCurrentPosition() > -200)
 	    {
 		sleep(1);
 	    }
 	arm.Stop();
-            while (!gamepad1.a) {
-                sleep(1);
-            }
-	sleep(100);
+            // while (!gamepad1.a) {
+            //     sleep(1);
+            // }
+	sleep(3000);
 
 	//	left_turn(92);
-	arm.Brake();
+	//arm.Brake();
 	arm.Reset();
          telemetry.addData("armpos:", "%10d", arm.getCurrentPosition());
             telemetry.addData("slidepos:", "%10df", slide.getCurrentPosition());
             telemetry.update();
-            while (!gamepad1.a) {
-                sleep(1);
-            }
+            // while (!gamepad1.a) {
+            //     sleep(1);
+            // }
 	
 	arm.move(0.4);
-	while(arm.getCurrentPosition() < 1400)
+	while(arm.getCurrentPosition() < 1530)
 	    {
 		sleep(1);
 	    }
 	arm.move(0.05);
 	rotator.setposition(0.45);
-	    moveRobot_forward(DRIVE_SPEED,0,10);
-            while (!gamepad1.a) {
-                sleep(1);
-            }
+            // while (!gamepad1.a) {
+            //     sleep(1);
+            // }
 	slide.move(0.4);
-	while(slide.getCurrentPosition() < 1400)
+	while(slide.getCurrentPosition() < 950)
 	    {
 		sleep(1);
 	    }
-	slide.Stop();
+	slide.move(0.05);
+	    moveRobot_forward(DRIVE_SPEED,0,30);
+	                leftFrontDrive.setPower(0.05);
+            rightFrontDrive.setPower(0.05);
+            leftBackDrive.setPower(0.05);
+            rightBackDrive.setPower(0.05);
+	    sleep(1000);
+	    long startpos = slide.getCurrentPosition();
+	slide.move(-0.4);
+	while(slide.getCurrentPosition() > (startpos - 500))
+	    { 
+		sleep(1);
+	    }
+	slide.move(0.05);
+	sleep(1000);
+	grabber.release();
 	//	            encoderDrive(DRIVE_SPEED, 12, 12, 5.0);
-            while (!gamepad1.a) {
-                sleep(1);
-            }
+	moveRobot_backward(DRIVE_SPEED,0,32);
+	slide.move(-0.3);
+	while(slide.getCurrentPosition() > 60)
+	    {
+		sleep(1);
+	    }
+	slide.move(-0.07);
+	right_turn_counter(980);
+	moveRobot_forward(DRIVE_SPEED,0,50);
+	arm.move(0.4);
+	while(arm.getCurrentPosition() < 1700)
+	    {
+		sleep(1);
+	    }
+	arm.move(0.05);
+
     }
     /*
      *  Method to perform a relative move, based on encoder counts.
@@ -339,6 +367,23 @@ public class autospecimen extends LinearOpMode {
         telemetry.addData(">", "final angle %.1f", gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
         telemetry.update();
         return driveto_angle;
+    }
+
+    void right_turn_counter(long ticks) {
+	long toposition = leftFrontDrive.getCurrentPosition() + ticks;
+        leftFrontDrive.setPower(-TURN_SPEED);
+        rightFrontDrive.setPower(TURN_SPEED);
+        leftBackDrive.setPower(-TURN_SPEED);
+        rightBackDrive.setPower(TURN_SPEED);
+	while(	leftFrontDrive.getCurrentPosition() < toposition)
+	    {
+		sleep(1);
+	    }
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+	return;
     }
 
     double right_turn(double ANGLE) {

@@ -30,7 +30,7 @@ public class Arm {
         Arm = myOpMode.hardwareMap.get(DcMotor.class, "arm");
 
         Arm.setDirection(DcMotor.Direction.FORWARD);
-        Arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         //	Arm.setMode(DcMotor.STOP_AND_RESET_ENCODER);
 
         Arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

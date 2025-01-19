@@ -32,7 +32,9 @@ public class MecanumDrive extends LinearOpMode {
 	                telemetry.addData("axial:", "%5.2f", axial);
 	                telemetry.addData("lateral:", "%5.2f", lateral);
 	                telemetry.addData("yaw:", "%5.2f", yaw);
+			
             drive.driveRobot(axial, lateral, yaw);
+	    telemetry.addData("left ticks", "%10d", drive.getCurrentLeftFrontPosition());
         telemetry.update();
         }
     }

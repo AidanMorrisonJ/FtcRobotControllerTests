@@ -33,6 +33,7 @@ public class NewTeleOP extends LinearOpMode {
     boolean p1Xpushed = false;
     boolean p1Ypushed = false;
     boolean p1bpushed = false;
+    boolean override_arm_safety = false;
     @Override
     public void runOpMode() {
         drive.init();
@@ -52,6 +53,7 @@ public class NewTeleOP extends LinearOpMode {
             double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral = gamepad1.left_stick_x*0.8;
             double yaw = gamepad1.right_stick_x * 0.6;
+            double armpower = -gamepad2.left_stick_y;  // Note: pushing stick forward gives negative value
             // if (Math.abs(gamepad1.left_stick_x) > 0.8) {
             //     if (Math.abs(gamepad1.left_stick_y) < 0.3) {
             //         lateral = gamepad1.left_stick_x*0.8;
@@ -86,7 +88,16 @@ public class NewTeleOP extends LinearOpMode {
 	   }
 	   p1Ypushed = false;
 
-	   boolean slowbot = false;
+            if (gamepad1.dpad_down) {
+		override_arm_safety = true;
+		armpower = -0.4;
+            }
+	    else
+		{
+		    override_arm_safety = false;
+		}
+	    
+	    boolean slowbot = false;
             if (gamepad2.y) {
                 grabber.grab();
             }
@@ -140,7 +151,6 @@ public class NewTeleOP extends LinearOpMode {
                 drive.driveRobotSlow(axial, lateral, yaw);
             }
             double powerslide = -gamepad2.right_stick_y;  // Note: pushing stick forward gives negative value
-            double armpower = -gamepad2.left_stick_y;  // Note: pushing stick forward gives negative value
             if (Math.abs(armpower) > 0.05) {
                 savearmpower = armpower;
             }
@@ -153,7 +163,7 @@ public class NewTeleOP extends LinearOpMode {
             if (armposition >= maxarmpos) {
                 armpower = Math.min(armpower, 0);
             }
-            if (armposition <= 60) {
+            if (armposition <= 60 && !override_arm_safety) {
                 armpower = Math.max(armpower, 0);
             }
             if (slideposition >= slide.maxSlidePosition(armposition)) {

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -20,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.hardware.Arm;
 
 @Autonomous(name = "autonomous", group = "Wallace")
-//@Disabled
+@Disabled
 public class autonomous extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();

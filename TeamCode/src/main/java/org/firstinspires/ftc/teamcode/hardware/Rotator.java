@@ -8,10 +8,10 @@ public class Rotator {
 
     static final double MAX_POS = 1.0;     // Maximum rotational position
     static final double MIN_POS = 0.0;     // Minimum rotational position
-    private double currpos = 0.7; // starting position
-    private double increment = 0.05;
     /* Declare OpMode members. */
     private final LinearOpMode myOpMode;   // gain access to methods in the calling OpMode.
+    private double currpos = 0.45; // starting position
+    private final double increment = 0.05;
     // Define Motor and Servo objects  (Make them private so they can't be accessed externally)
     private Servo TurnServo = null;
 
@@ -29,12 +29,12 @@ public class Rotator {
     public void init() {
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
         TurnServo = myOpMode.hardwareMap.get(Servo.class, "rotator");
-	// try{
-	// Thread.sleep(10);
-	// }
-	// catch
-	    
-            myOpMode.telemetry.addData("not using currpos:", "%5.2f", currpos);
+        // try{
+        // Thread.sleep(10);
+        // }
+        // catch
+
+        myOpMode.telemetry.addData("not using currpos:", "%5.2f", currpos);
         myOpMode.telemetry.addData(">", "Rotator Servo Initialized");
     }
 
@@ -54,10 +54,9 @@ public class Rotator {
     public void rotate_left() {
         if (currpos > MIN_POS) {
             currpos = currpos - increment;
-	    if(currpos < MIN_POS)
-		{
-		    currpos =   MIN_POS;
-		}
+            if (currpos < MIN_POS) {
+                currpos = MIN_POS;
+            }
             TurnServo.setPosition(currpos);
         }
         myOpMode.telemetry.addData("rotleft:", "%5.2f", currpos);
@@ -85,15 +84,15 @@ public class Rotator {
     public double currpos() {
         return currpos;
     }
-    public void initpos()
-    {
+
+    public void initpos() {
         TurnServo.setPosition(currpos);
-            myOpMode.telemetry.addData("set currpos:", "%5.2f", currpos);
+        myOpMode.telemetry.addData("set currpos:", "%5.2f", currpos);
     }
-    public void setposition(double pos)
-    {
-	currpos = Math.min(pos,1);
-	currpos = Math.max(pos,0);
-	TurnServo.setPosition(currpos);
+
+    public void setposition(double pos) {
+        currpos = Math.min(pos, 1);
+        currpos = Math.max(pos, 0);
+        TurnServo.setPosition(currpos);
     }
 }
