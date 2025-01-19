@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.hardware.Grabber;
 import org.firstinspires.ftc.teamcode.hardware.Rotator;
 import org.firstinspires.ftc.teamcode.hardware.Slide;
 
-@TeleOp(name = "New TeleOp", group = "Wallace")
+@TeleOp(name = "New TeleOp", group = "AWallace")
 //@Disabled
 public class NewTeleOP extends LinearOpMode {
 
