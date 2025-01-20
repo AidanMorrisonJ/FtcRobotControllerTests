@@ -144,7 +144,7 @@ public class autospecimen extends LinearOpMode {
 		sleep(1);
 	    }
 	slide.move(0.05);
-	    moveRobot_forward(DRIVE_SPEED,0,30);
+	    moveRobot_forward(DRIVE_SPEED,0,31);
 	                leftFrontDrive.setPower(0.05);
             rightFrontDrive.setPower(0.05);
             leftBackDrive.setPower(0.05);
@@ -160,14 +160,14 @@ public class autospecimen extends LinearOpMode {
 	sleep(1000);
 	grabber.release();
 	//	            encoderDrive(DRIVE_SPEED, 12, 12, 5.0);
-	moveRobot_backward(DRIVE_SPEED,0,32);
+	moveRobot_backward(DRIVE_SPEED,0,29);
 	slide.move(-0.3);
 	while(slide.getCurrentPosition() > 60)
 	    {
 		sleep(1);
 	    }
 	slide.move(-0.07);
-	right_turn_counter(980);
+	right_turn_counter(900);
 	moveRobot_forward(DRIVE_SPEED,0,50);
 	arm.move(0.4);
 	while(arm.getCurrentPosition() < 1700)
@@ -175,7 +175,7 @@ public class autospecimen extends LinearOpMode {
 		sleep(1);
 	    }
 	arm.move(0.05);
-
+rotator.setposition(0.45);
     }
     /*
      *  Method to perform a relative move, based on encoder counts.

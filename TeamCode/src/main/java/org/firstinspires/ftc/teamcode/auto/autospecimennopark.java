@@ -144,7 +144,7 @@ public class autospecimennopark extends LinearOpMode {
 		sleep(1);
 	    }
 	slide.move(0.05);
-	    moveRobot_forward(DRIVE_SPEED,0,30);
+	    moveRobot_forward(DRIVE_SPEED,0,31);
 	                leftFrontDrive.setPower(0.05);
             rightFrontDrive.setPower(0.05);
             leftBackDrive.setPower(0.05);
@@ -173,6 +173,7 @@ public class autospecimennopark extends LinearOpMode {
 		sleep(1);
 	    }
 	arm.move(0.05);
+rotator.setposition(0.45);
 
     }
     /*

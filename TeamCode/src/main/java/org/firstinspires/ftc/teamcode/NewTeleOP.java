@@ -40,8 +40,8 @@ public class NewTeleOP extends LinearOpMode {
         arm.init();
         grabber.init();
         rotator.init();
-	sleep(10);
-	rotator.initpos();
+	//sleep(10);
+	//	rotator.initpos();
         slide.init();
         telemetry.addData(">", "Press Start to run");
         telemetry.update();
