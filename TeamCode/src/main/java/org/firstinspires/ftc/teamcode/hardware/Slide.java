@@ -69,4 +69,10 @@ public class Slide {
     {
 	Slide.setPower(0);
     }
+    public void MoveToPosition(int position)
+    {
+        Slide.setMode(DcMotor.RunMode.RUN_USING_ENCODERS);
+	Slide.setTargetPosition(position);
+	Slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 }

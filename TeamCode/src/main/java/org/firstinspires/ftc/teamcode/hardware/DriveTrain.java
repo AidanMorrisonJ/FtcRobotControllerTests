@@ -108,4 +108,16 @@ public class DriveTrain {
     {
 	return leftFrontDrive;
     }
+    public DcMotor getLeftBackDrive()
+    {
+	return leftBackDrive;
+    }
+    public DcMotor getRightFrontDrive()
+    {
+	return rightFrontDrive;
+    }
+    public DcMotor getRightBackDrive()
+    {
+	return rightBackDrive;
+    }
 }

@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 public class Arm {
-
     /* Declare OpMode members. */
     private final LinearOpMode myOpMode;   // gain access to methods in the calling OpMode.
     long arm_drop_position = 1790;
     long arm_slow_position = 1500;
+    long startposition = 818;
     // Define Motor and Servo objects  (Make them private so they can't be accessed externally)
     private DcMotor Arm = null;
 
